@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+  // --output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model StudySession {
+  id         Int         @id @default(autoincrement())
+  topic      String
+  summary    String      @db.Text
+  createdAt  DateTime    @default(now())
+  userId     Int
+  user       User       @relation(fields: [userId], references: [id])
+  flashcards Flashcard[]
+  quizzes    Quiz[]
+}
+
+// model Flashcard {
+//   id        Int          @id @default(autoincrement())
+//   question  String       @db.Text
+//   answer    String       @db.Text
+//   sessionId Int
+//   session   StudySession @relation(fields: [sessionId], references: [id])
+// }
+
+model Flashcard {
+  id         Int          @id @default(autoincrement())
+  question   String       @db.Text
+  answer     String       @db.Text
+  status     String       @default("new")
+  reviewedAt DateTime?
+  sessionId  Int
+  session    StudySession @relation(fields: [sessionId], references: [id],onDelete: Cascade)
+}
+
+
+model Quiz {
+  id            Int          @id @default(autoincrement())
+  question      String       @db.Text
+  options       Json
+  correctAnswer String
+  difficulty    String
+  sessionId     Int
+  session       StudySession @relation(fields: [sessionId], references: [id],onDelete: Cascade)
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  sessions StudySession[]
+}
