@@ -28,14 +28,3 @@
 
 
 
-import OpenAI from "openai";
-const client = new OpenAI({
-    apiKey: "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",
-    baseURL: "https://api.groq.com/openai/v1",
-});
-
-const response = await client.responses.create({
-    model: "openai/gpt-oss-20b",
-    input: "Explain transactions",
-});
-console.log(response.output_text);

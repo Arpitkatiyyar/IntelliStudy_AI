@@ -1,4 +1,4 @@
-import { askAI,askGeminiAI,askGroqAI } from "../services/aiService.service.js";
+import { askAI,askGeminiAI } from "../services/aiService.service.js";
 import { buildPrompt } from "../utils/promptBuilder.js";
 import { ai } from "../services/gemini.service.js";
 import { extractJSON } from "../utils/extractJSON.js";

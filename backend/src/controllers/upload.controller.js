@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import fs from 'fs';
+import fs from "fs";
 import { extractTextFromPdf } from "../utils/pdfExtractor.js";
 import { extractTextFromDocument } from "../utils/documentExtractor.js";
 import { askAI, askGeminiAI } from "../services/aiService.service.js";
@@ -20,7 +20,8 @@ export const uploadPdf = async (req, res) => {
     const text = await extractTextFromDocument(req.file.path);
     console.log("Extracted text length:", text.length);
     const limitedText = text.slice(0, 12000);
-    const cacheKey ="pdf:" + crypto.createHash("sha256").update(limitedText).digest("hex");
+    const cacheKey =
+      "pdf:" + crypto.createHash("sha256").update(limitedText).digest("hex");
     const cacheData = await redisClient.get(cacheKey);
     let parsedResponse;
     if (cacheData) {
@@ -60,15 +61,15 @@ export const uploadPdf = async (req, res) => {
     return res.status(500).json({
       message: error.message,
     });
-  } finally{
-    if(req.file?.path){
-      fs.unlink(req.file.path,(err)=>{
-        if(err){
-          console.log("file delete err",err)
-        }else{
-          console.log("temp file deleted.")
+  } finally {
+    if (req.file?.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) {
+          console.log("file delete err", err);
+        } else {
+          console.log("temp file deleted.");
         }
-      })
+      });
     }
   }
 };
