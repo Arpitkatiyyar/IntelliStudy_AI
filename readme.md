@@ -200,7 +200,7 @@ AI-STUDY-PROJECT
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### 1. Clone Repository
 
