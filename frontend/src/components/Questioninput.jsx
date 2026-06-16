@@ -82,7 +82,7 @@ export default function QuestionInput() {
       <div className="mt-4 flex gap-4">
         <input
           type="file"
-          accept=".pdf"
+          accept=".pdf,.docs,.txt"
           onChange={(e) => setFile(e.target.files[0])}
           className="border rounded px-2 py-1"
         />

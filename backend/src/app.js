@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-
+import redisClient from "./config/redis.js";
 import testRoutes from "./routes/test.routes.js";
 import studyRoutes from "./routes/study.routes.js";
 import authRoutes from "./routes/auth.routes.js";

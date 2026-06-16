@@ -1,4 +1,4 @@
-import { askAI,askGeminiAI } from "../services/aiService.service.js";
+import { askAI,askGeminiAI,askGroqAI } from "../services/aiService.service.js";
 import { buildPrompt } from "../utils/promptBuilder.js";
 import { ai } from "../services/gemini.service.js";
 import { extractJSON } from "../utils/extractJSON.js";
@@ -69,19 +69,8 @@ export const askQuestionWithOllama = async (req, res) => {
     }
 
     const prompt = buildPrompt(question);
-
-    // Call Ollama local server
-    // const response = await axios.post("http://localhost:11434/api/generate", {
-    //   model: "llama3",
-    //   prompt,
-    //   stream: false,
-    // });
-    // const textResponse = response.data?.response || "";
-
     const textResponse = await askAI(prompt);
-
     const parsedResponse = extractJSON(textResponse);
-
     if (!parsedResponse) {
       return res.status(500).json({
         message: "Could not parse AI response",

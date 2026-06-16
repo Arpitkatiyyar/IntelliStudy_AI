@@ -2,6 +2,7 @@ import express from "express";
 import {
   askQuestionWithGemini,
   askQuestionWithOllama,
+   
   getHistory,
   deleteSession,
   getSessionById,
@@ -19,6 +20,7 @@ const router = express.Router();
 // );
 
 router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithOllama);
+
 router.get("/history", authMiddleware, getHistory);
 router.delete("/:id",authMiddleware,deleteSession);
 router.get("/:id", authMiddleware, getSessionById);
