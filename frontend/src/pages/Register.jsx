@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading,setLoading]= useState(false)
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,19 +19,28 @@ export default function Register() {
       alert("Passwords do not match");
       return;
     }
+    if (!form.name || !form.email || !form.password) {
+      alert("Please fill all fields");
+      return;
+    }
     try {
+      setLoading(true);
       const res = await api.post("/api/auth/register", form);
-      login({
-        id: res.data.user.id,
-        name: res.data.user.name,
-        email: res.data.user.email,
-        token: res.data.token,
-      });
-      navigate("/");
+      // login({
+      //   id: res.data.user.id,
+      //   name: res.data.user.name,
+      //   email: res.data.user.email,
+      //   token: res.data.token,
+      // });
+      // login(res.data);
+      // navigate("/");
+      navigate(`/verify-otp?email=${form.email}`);
       alert("Registered successfully");
     } catch (error) {
       console.log(error);
-      alert("Registration failed");
+      alert(error.response?.data?.message || "Registration failed");
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -75,10 +85,11 @@ export default function Register() {
         </label>
 
         <button
+          disabled={loading}
           onClick={handleRegister}
           className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded"
         >
-          Sign Up
+          {loading ? "Signing Up..." : "Sign Up"}
         </button>
 
         <p className="mt-4 text-sm text-center">

@@ -30,7 +30,7 @@ export const askGeminiAI = async (prompt) => {
     return textResponse;
   } catch (error) {
     console.error("Gemini API error:", error);
-    // throw new Error("AI service failed");
+    throw new Error("AI service failed");
   }
 };
 

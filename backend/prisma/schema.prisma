@@ -53,6 +53,6 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-
+  refreshToken String?
   sessions StudySession[]
 }

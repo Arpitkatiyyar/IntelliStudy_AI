@@ -8,7 +8,7 @@ import History from "./pages/History.jsx";
 import Profile from "./pages/Profile.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import SessionDetails from "./pages/SessionDetails";
-
+import VerifyOTP from "./pages/VerifyOTP.jsx";
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
 
@@ -26,7 +26,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
+          <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/" element={<Navigate to="/study" replace />} />
 
           <Route

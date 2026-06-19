@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const { login } = useAuth();
@@ -12,18 +12,18 @@ export default function Login() {
     try {
       const res = await api.post("/api/auth/login", form);
 
-      login({
-        id: res.data.user.id,
-        name: res.data.user.name,
-        email: res.data.user.email,
-        token: res.data.token,
-      });
-
+      // login({
+      //   id: res.data.user.id,
+      //   name: res.data.user.name,
+      //   email: res.data.user.email,
+      //   token: res.data.token,
+      // });
+      login(res.data);
       alert("Login successful");
       navigate("/");
     } catch (error) {
       console.error(error);
-      alert("Login failed");
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -33,7 +33,6 @@ export default function Login() {
         <h2 className="text-2xl font-bold mb-6">Log In</h2>
 
         <input
-        
           type="email"
           placeholder="Email"
           className="w-full p-2 mb-4 border rounded bg-gray-700 text-white"

@@ -115,11 +115,11 @@ export const getHistory = async (req, res) => {
 
 export const deleteSession = async (req, res) => {
   const { id } = req.params;
-  const userID = req.user.userID;
+  const userId = req.user.userId;
   const session = await prisma.studySession.findFirst({
     where: {
       id: Number(id),
-      userID,
+      userId,
     },
   });
   if (!session) {

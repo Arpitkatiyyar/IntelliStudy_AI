@@ -4,16 +4,7 @@ const AuthContext = createContext();
 
 const getStoredUser = () => {
   try {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    const token = localStorage.getItem("token") || user?.token;
-
-    if (!user || !token) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      return null;
-    }
-
-    return { ...user, token };
+    return JSON.parse(localStorage.getItem("user") || "null");
   } catch {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -24,21 +15,29 @@ const getStoredUser = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(getStoredUser);
 
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    if (userData?.token) {
-      localStorage.setItem("token", userData.token);
-    }
+  const login = (data) => {
+    localStorage.setItem("user", JSON.stringify(data.user));
 
-    setUser(userData);
+    localStorage.setItem("token", data.accessToken);
+
+    setUser(data.user);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {}
+
     localStorage.removeItem("user");
     localStorage.removeItem("token");
 
     setUser(null);
   };
+
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
@@ -46,6 +45,7 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout,
+        isAuthenticated,
       }}
     >
       {children}

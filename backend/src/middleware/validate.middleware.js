@@ -1,14 +1,16 @@
 export const validate = (schema) => {
   return (req, res, next) => {
-    try {
-      schema.parse(req.body);
-      next();
-    } catch (error) {
+    const result = schema.safeParse(req.body);
+
+    if (!result.success) {
+      console.log(result.error);
+
       return res.status(400).json({
         success: false,
-
-        message: error.errors[0].message,
+        errors: result.error.issues,
       });
     }
+
+    next();
   };
 };

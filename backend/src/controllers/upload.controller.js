@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import fs from "fs";
-import { extractTextFromPdf } from "../utils/pdfExtractor.js";
 import { extractTextFromDocument } from "../utils/documentExtractor.js";
 import { askAI, askGeminiAI } from "../services/aiService.service.js";
 import { buildPrompt } from "../utils/promptBuilder.js";
@@ -16,16 +15,14 @@ export const uploadPdf = async (req, res) => {
         message: "No file uploaded",
       });
     }
-    // const text = await extractTextFromPdf(req.file.path);
     const text = await extractTextFromDocument(req.file.path);
-    console.log("Extracted text length:", text.length);
+    // console.log("Extracted text length:", text.length);
     const limitedText = text.slice(0, 12000);
-    const cacheKey =
-      "pdf:" + crypto.createHash("sha256").update(limitedText).digest("hex");
+    const cacheKey ="pdf:" + crypto.createHash("sha256").update(limitedText).digest("hex");
     const cacheData = await redisClient.get(cacheKey);
     let parsedResponse;
     if (cacheData) {
-      console.log("PDF CACHE HIT");
+      // console.log("PDF CACHE HIT");
       parsedResponse = JSON.parse(cacheData);
     } else {
       console.log("PDF CACHE MISS");
