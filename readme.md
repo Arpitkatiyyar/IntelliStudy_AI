@@ -8,15 +8,15 @@
 
 IntelliStudy AI is a full-stack AI learning platform designed to help students study smarter and faster.
 
-Users can either ask questions directly or upload study materials such as **PDF, DOCX, and TXT files**. The platform automatically analyzes the content and generates:
+Users can ask questions or upload study materials such as **PDF, DOCX, and TXT files**. The platform automatically analyzes content and generates:
 
--  Concise Summaries
+-  AI-powered Summaries
 -  Flashcards
 -  Multiple-Choice Quizzes
 -  Learning Analytics
 -  Study Session History
 
-The application combines modern web technologies with AI models to provide an interactive and personalized learning experience.
+The application combines modern web technologies with Large Language Models (LLMs) to provide an interactive and personalized learning experience.
 
 ---
 
@@ -24,47 +24,50 @@ The application combines modern web technologies with AI models to provide an in
 
 ###  Authentication & Security
 
-- User Registration
-- User Login
+- User Registration & Login
 - JWT Authentication
+- Refresh Token Authentication
+- HTTP-only Cookies
 - Protected Routes
+- Password Hashing using bcrypt
 - Secure API Access
+- Rate Limiting
+- Email OTP Verification
 
-###  AI-Powered Study Generation
+### AI-Powered Study Generation
 
-- Generate study material from any topic
 - AI-generated summaries
-- Automatic flashcard creation
-- Multiple-choice quiz generation
+- Automatic flashcard generation
+- AI-generated quizzes
+- Generate study material from any topic
 - Ollama (Llama 3) integration
-- Gemini integration support
+- Google Gemini integration
 
-###  Document Analysis
+### Document Analysis
 
-- Upload PDF files
-- Upload DOCX files
-- Upload TXT files
-- Automatic text extraction
-- AI-powered content analysis
-- Generate study material from notes and documents
+- PDF Upload Support
+- DOCX Upload Support
+- TXT Upload Support
+- Automatic Text Extraction
+- AI-powered Content Analysis
+- Generate Study Material from Notes and Documents
 
-###  Flashcard Learning System
+### Flashcard Learning System
 
 - Review generated flashcards
 - Mark flashcards as:
   - Known
   - Difficult
-- Track learning progress
-- Measure mastery percentage
+- Progress Tracking
+- Mastery Percentage Calculation
 
-###  Quiz System
+### Quiz System
 
-- AI-generated quizzes
-- Multiple-choice questions
-- Difficulty levels
-- Instant answer validation
+- AI-generated MCQs
+- Difficulty Levels
+- Instant Answer Validation
 
-###  Learning Analytics
+### Learning Analytics
 
 - Total Study Sessions
 - Total Flashcards
@@ -73,35 +76,32 @@ The application combines modern web technologies with AI models to provide an in
 - Mastery Percentage
 - Weak Topic Detection
 
-###  Study History
+### Study History
 
-- Save AI-generated study sessions
-- View previous sessions
-- Open detailed session pages
-- Delete sessions
+- Save Study Sessions
+- View Previous Sessions
+- Open Session Details
+- Delete Sessions
 
-###  Redis Caching
+### Redis Integration
 
-- Redis-based caching for document analysis
-- Faster repeated document processing
-- Reduced AI response time
-- Minimized redundant LLM requests
+- Document Analysis Caching
+- OTP Storage
+- Temporary Authentication Data
+- Faster Repeated Requests
+- Reduced AI Response Time
 
----
+<!-- ### Docker Support
 
-##  Technical Highlights
-
-- Implemented JWT-based authentication and protected routes.
-- Built AI-powered study material generation using Ollama and Gemini.
-- Integrated Redis caching to reduce repeated document processing.
-- Designed relational database models using Prisma ORM and MySQL.
-- Added support for PDF, DOCX, and TXT document ingestion.
-- Implemented flashcard progress tracking and weak-topic analytics.
-- Created a scalable backend architecture using controllers, services, middleware, and utilities.
+- Frontend Container
+- Backend Container
+- MySQL Container
+- Redis Container
+- One-command Deployment -->
 
 ---
 
-##  System Architecture
+## System Architecture
 
 ```text
 User
@@ -112,7 +112,7 @@ React Frontend
  ▼
 Express Backend
  │
- ├── JWT Authentication
+ ├── JWT + Refresh Token Auth
  │
  ├── Prisma ORM
  │       │
@@ -120,18 +120,22 @@ Express Backend
  │     MySQL
  │
  ├── Redis Cache
+ │       ├── Document Cache
+ │       └── OTP Storage
  │
- ├── PDF / DOCX / TXT Extraction
+ ├── File Processing Layer
+ │       ├── PDF
+ │       ├── DOCX
+ │       └── TXT
  │
  └── AI Layer
-         │
          ├── Ollama (Llama 3)
-         └── Gemini
+         └── Google Gemini
 ```
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -139,7 +143,7 @@ Express Backend
 - React Router
 - Axios
 - Tailwind CSS
-- React Context API
+- Context API
 
 ### Backend
 
@@ -150,6 +154,13 @@ Express Backend
 
 - MySQL
 - Prisma ORM
+
+### Authentication
+
+- JWT
+- Refresh Tokens
+- HTTP-only Cookies
+- bcrypt
 
 ### AI & NLP
 
@@ -165,16 +176,17 @@ Express Backend
 - pdf-parse
 - Mammoth
 
-### Authentication
+### DevOps
 
-- JWT (JSON Web Tokens)
+- Docker
+- Docker Compose
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```text
-AI-STUDY-PROJECT
+IntelliStudy_AI
 │
 ├── backend
 │   ├── prisma
@@ -195,12 +207,14 @@ AI-STUDY-PROJECT
 │       ├── pages
 │       └── services
 │
-└── README.md
+<!-- ├── docker-compose.yml -->
+├── README.md
+└── .env
 ```
 
 ---
 
-##  Installation
+## Installation
 
 ### 1. Clone Repository
 
@@ -210,37 +224,41 @@ git clone https://github.com/Arpitkatiyyar/IntelliStudy_AI.git
 cd IntelliStudy_AI
 ```
 
-### 2. Backend Setup
+---
+
+### 2. Configure Environment Variables
+
+Create a `.env` file inside the backend folder:
+
+```env
+DATABASE_URL=mysql://root:password@localhost:3306/intellistudy
+
+JWT_SECRET=your_access_token_secret
+
+JWT_REFRESH_SECRET=your_refresh_token_secret
+
+REDIS_URL=redis://localhost:6379
+
+EMAIL_USER=your_email@gmail.com
+
+EMAIL_PASS=your_google_app_password
+
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+---
+
+### 3. Backend Setup
 
 ```bash
 cd backend
 
 npm install
-```
 
-Create a `.env` file:
-
-```env
-DATABASE_URL="mysql://username:password@localhost:3306/intellistudy"
-
-JWT_SECRET=your_secret
-
-GEMINI_API_KEY=your_gemini_api_key
-
-REDIS_URL=redis://localhost:6379
-```
-
-Run Prisma:
-
-```bash
 npx prisma migrate dev
 
 npx prisma generate
-```
 
-Start Backend:
-
-```bash
 npm run dev
 ```
 
@@ -252,7 +270,7 @@ http://localhost:5000
 
 ---
 
-### 3. Frontend Setup
+### 4. Frontend Setup
 
 ```bash
 cd frontend
@@ -270,7 +288,7 @@ http://localhost:5173
 
 ---
 
-### 4. Start Redis
+### 5. Redis Setup
 
 Using Docker:
 
@@ -286,9 +304,9 @@ docker ps
 
 ---
 
-### 5. Start Ollama
+### 6. Ollama Setup
 
-Pull Llama 3:
+Install Ollama and pull Llama 3:
 
 ```bash
 ollama pull llama3
@@ -302,17 +320,78 @@ ollama serve
 
 ---
 
+<!-- ## Run with Docker
+
+Build and start all services:
+
+```bash
+docker compose up -d --build
+```
+
+Stop all services:
+
+```bash
+docker compose down
+```
+
+View containers:
+
+```bash
+docker ps
+``` -->
+
+| Service | Port |
+|----------|------|
+| Frontend | 5173 |
+| Backend | 5000 |
+| MySQL | 3307 |
+| Redis | 6379 |
+
+---
+
+##  AI Models
+
+### Ollama
+
+- Runs locally
+- No API cost
+- Privacy-friendly
+- Uses Llama 3
+
+### Google Gemini
+
+- Cloud-based AI
+- Fast response times
+- Easy deployment
+
+---
+
+##  Resume Highlights
+
+- Built a full-stack AI-powered learning platform using React, Node.js, Express, Prisma, MySQL, Redis, and Ollama.
+- Implemented secure authentication using JWT, Refresh Tokens, HTTP-only Cookies, Rate Limiting, and Email OTP Verification.
+- Developed an AI pipeline that generates summaries, flashcards, and quizzes from user queries and uploaded documents.
+- Integrated Redis caching and OTP storage to improve performance and authentication workflows.
+- Containerized the complete application using Docker and Docker Compose.
+- Designed analytics features including weak-topic detection, mastery tracking, and study session history.
+
+---
+
 ##  Future Improvements
 
 - AI Recommendation Engine
 - Study Streak Tracking
-- Dark Mode
-- Collaborative Study Sessions
 - Quiz Attempt Analytics
+- Collaborative Study Sessions
+- Dark Mode
+- Mobile Application
 
 ---
-
 
 ##  Support
 
 If you found this project useful, consider giving it a star on GitHub.
+
+---
+
+
