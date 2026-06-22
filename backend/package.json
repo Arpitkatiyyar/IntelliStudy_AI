@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon server.js",
+    "build": "prisma generate && prisma migrate deploy",
     "start":"node server.js"
   },
   "keywords": [],
