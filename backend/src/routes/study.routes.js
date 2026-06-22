@@ -12,14 +12,9 @@ import { validate } from "../middleware/validate.middleware.js";
 import { studySchema } from "../validations/study.validation.js";
 const router = express.Router();
 
-// router.post(
-//   "/ask",
-//   authMiddleware,
-//   validate(studySchema),
-//   askQuestionWithGemini,
-// );
+router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithGemini);
 
-router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithOllama);
+// router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithOllama);
 
 router.get("/history", authMiddleware, getHistory);
 router.delete("/:id",authMiddleware,deleteSession);
