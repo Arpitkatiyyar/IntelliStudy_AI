@@ -9,7 +9,7 @@ import {
 import { validate } from "../middleware/validate.middleware.js";
 import { registerSchema, loginSchema } from "../validations/auth.validation.js";
 import { authLimiter } from "../middleware/rateLimit.middleware.js";
-import {authmiddleware} from "../middleware/auth.middleware.js"
+import {authMiddleware} from "../middleware/auth.middleware.js"
 const router = express.Router();
 
 router.post("/register", authLimiter, validate(registerSchema), registerUser);
@@ -18,5 +18,5 @@ router.post("/login", authLimiter, validate(loginSchema), loginUser);
 
 router.post("/refresh", refreshAcessToken);
 
-router.post("/logout",authmiddleware, logoutUser);
+router.post("/logout",authMiddleware, logoutUser);
 export default router;

@@ -13,7 +13,10 @@ import analyticsRoutes from "./routes/analytics.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 const app = express();
 app.use(cors({
-  origin: "http://localhost:5173",  
+  origin: [
+      "http://localhost:5173",
+      process.env.FRONTEND_URL,
+    ],  
   credentials: true,               
 }));
 app.use(express.json());
