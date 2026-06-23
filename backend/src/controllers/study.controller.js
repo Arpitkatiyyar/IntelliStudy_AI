@@ -1,4 +1,4 @@
-import { askAI,askGeminiAI } from "../services/aiService.service.js";
+import { askAI,askGeminiAI,askCerebrasAI } from "../services/aiService.service.js";
 import { buildPrompt } from "../utils/promptBuilder.js";
 import { ai } from "../services/gemini.service.js";
 import { extractJSON } from "../utils/extractJSON.js";
@@ -96,6 +96,41 @@ export const askQuestionWithOllama = async (req, res) => {
   }
 };
 
+export const askQuestionWithCerebras = async (req, res) => {
+  try {
+    const { question } = req.body;
+
+    if (!question?.trim()) {
+      return res.status(400).json({ message: "Question required" });
+    }
+
+    const prompt = buildPrompt(question);
+    const textResponse = await askCerebrasAI(prompt);
+    const parsedResponse = extractJSON(textResponse);
+    if (!parsedResponse) {
+      return res.status(500).json({
+        message: "Could not parse AI response",
+        raw: textResponse,
+      });
+    }
+
+    const savedSession = await saveStudySession({
+      userId: req.user.userId,
+      topic: question,
+      summary: parsedResponse.summary,
+      flashcards: parsedResponse.flashcards,
+      quiz: parsedResponse.quiz,
+    });
+
+    res.status(200).json(parsedResponse);
+  } catch (error) {
+    console.error("Ollama error:", error);
+    res.status(500).json({
+      message: "Error",
+      error: error.message,
+    });
+  }
+};
 
 export const getHistory = async (req, res) => {
   const session = await prisma.studySession.findMany({

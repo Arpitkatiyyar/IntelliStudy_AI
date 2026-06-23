@@ -25,7 +25,7 @@ export const uploadPdf = async (req, res) => {
       // console.log("PDF CACHE HIT");
       parsedResponse = JSON.parse(cacheData);
     } else {
-      console.log("PDF CACHE MISS");
+      // console.log("PDF CACHE MISS");
       const prompt = buildPrompt(limitedText);
       // const textResponse = await askAI(prompt);
       const textResponse = await askGeminiAI(prompt);

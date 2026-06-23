@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ai } from "../services/gemini.service.js";
+import { client } from "./cerebras.service.js";
 import OpenAI from "openai";
 export const askAI = async (prompt) => {
   try {
@@ -34,4 +35,24 @@ export const askGeminiAI = async (prompt) => {
   }
 };
 
- 
+ export const askCerebrasAI = async (prompt) => {
+  const response = await client.chat.completions.create({
+    model: "gpt-oss-120b",
+
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are IntelliStudy AI, an expert educational assistant that generates structured summaries, flashcards, quizzes, and study notes."
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+
+    temperature: 0.4,
+    max_tokens: 3000
+  });
+  return response.choices[0].message.content;
+};

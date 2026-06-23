@@ -2,7 +2,7 @@ import express from "express";
 import {
   askQuestionWithGemini,
   askQuestionWithOllama,
-   
+  askQuestionWithCerebras,
   getHistory,
   deleteSession,
   getSessionById,
@@ -12,8 +12,13 @@ import { validate } from "../middleware/validate.middleware.js";
 import { studySchema } from "../validations/study.validation.js";
 const router = express.Router();
 
-router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithGemini);
+// route for using gemini model
+// router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithGemini);
 
+//route for using cerebras inference model
+router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithCerebras);
+
+//route for using ollama locally on machine
 // router.post("/ask",authMiddleware,validate(studySchema),askQuestionWithOllama);
 
 router.get("/history", authMiddleware, getHistory);
