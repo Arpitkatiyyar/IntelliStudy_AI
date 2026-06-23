@@ -21,7 +21,7 @@ export default function QuestionInput() {
       setLoading(true);
       const res = await api.post("/api/study/ask", { question });
       setResponse(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       if (error.response?.status === 401) {
         logout();

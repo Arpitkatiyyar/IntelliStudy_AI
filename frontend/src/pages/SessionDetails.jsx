@@ -13,7 +13,7 @@ export default function SessionDetails() {
     try {
       const res = await api.get(`/api/study/${id}`);
       setSession(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
