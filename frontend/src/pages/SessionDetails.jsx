@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import FlashcardPlayer from "../components/FlaschcardPlayer";
 import DashboardLayout from "../layouts/DashboardLayout";
 import api from "../services/api";
@@ -38,7 +41,12 @@ export default function SessionDetails() {
       {/* Summary */}
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-xl font-bold mb-3">Summary</h2>
-        <p>{session.summary}</p>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {item.summary}
+        </ReactMarkdown>
       </div>
 
       {/* Flashcards */}
@@ -59,7 +67,13 @@ export default function SessionDetails() {
         {session.quizzes?.map((quiz, index) => (
           <div key={index} className="bg-white p-4 rounded shadow mb-4">
             <p className="font-semibold mb-2">
-              Q{index + 1}. {quiz.question}
+              Q{index + 1}.
+              <ReactMarkdown
+                remarkPlugins={[remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+              >
+                {quiz.question}
+              </ReactMarkdown>
             </p>
             {quiz.options?.map((option, i) => (
               <button
@@ -70,7 +84,12 @@ export default function SessionDetails() {
                   ${selected[index] === option && option !== quiz.correctAnswer ? "bg-red-200 border-red-500" : ""}
                   hover:bg-gray-100`}
               >
-                {option}
+                <ReactMarkdown
+                  remarkPlugins={[remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {option}
+                </ReactMarkdown>
               </button>
             ))}
           </div>
