@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 export default function History() {
   const [history, setHistory] = useState([]);
@@ -47,7 +50,12 @@ export default function History() {
         <div key={item.id} className="border p-4 mt-3 rounded">
           <h3 className="font-bold">{item.topic}</h3>
 
-          <p>{item.summary}</p>
+          <ReactMarkdown
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeKatex]}
+          >
+            {item.summary}
+          </ReactMarkdown>
           <button
             onClick={() => navigate(`/session/${item.id}`)}
             className="bg-blue-500 text-white px-3 py-2 rounded mr-2 gap-4"
@@ -61,7 +69,6 @@ export default function History() {
           >
             Delete
           </button>
-
         </div>
       ))}
     </div>
