@@ -9,14 +9,14 @@ import api from "../services/api";
 
 export default function SessionDetails() {
   const { id } = useParams();
+
   const [session, setSession] = useState(null);
-  const [selected, setSelected] = useState({}); // track selected answers
+  const [selected, setSelected] = useState({});
 
   const fetchSession = async () => {
     try {
       const res = await api.get(`/api/study/${id}`);
       setSession(res.data);
-      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -36,53 +36,78 @@ export default function SessionDetails() {
 
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">{session.topic}</h1>
+      <h1 className="text-3xl font-bold mb-6">
+        {session.topic}
+      </h1>
 
       {/* Summary */}
-      <div className="bg-white p-6 rounded shadow">
-        <h2 className="text-xl font-bold mb-3">Summary</h2>
+      <div className="bg-white p-6 rounded shadow prose max-w-none">
+        <h2 className="text-xl font-bold mb-3">
+          Summary
+        </h2>
+
         <ReactMarkdown
           remarkPlugins={[remarkMath]}
           rehypePlugins={[rehypeKatex]}
         >
-          {item.summary}
+          {session.summary}
         </ReactMarkdown>
       </div>
 
       {/* Flashcards */}
       <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Flashcards</h2>
-        {/* {session.flashcards?.map((card, index) => (
-          <div key={index} className="bg-white p-4 rounded shadow mb-3">
-            <p><b>Q:</b> {card.question}</p>
-            <p><b>A:</b> {card.answer}</p>
-          </div>
-        ))} */}
-        <FlashcardPlayer flashcards={session.flashcards} />
+        <h2 className="text-xl font-bold mb-4">
+          Flashcards
+        </h2>
+
+        <FlashcardPlayer
+          flashcards={session.flashcards}
+        />
       </div>
 
       {/* Quiz */}
       <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Quiz</h2>
+        <h2 className="text-xl font-bold mb-4">
+          Quiz
+        </h2>
+
         {session.quizzes?.map((quiz, index) => (
-          <div key={index} className="bg-white p-4 rounded shadow mb-4">
-            <p className="font-semibold mb-2">
-              Q{index + 1}.
+          <div
+            key={index}
+            className="bg-white p-4 rounded shadow mb-4"
+          >
+            <div className="font-semibold mb-2">
               <ReactMarkdown
                 remarkPlugins={[remarkMath]}
                 rehypePlugins={[rehypeKatex]}
               >
-                {quiz.question}
+                {`Q${index + 1}. ${quiz.question}`}
               </ReactMarkdown>
-            </p>
+            </div>
+
             {quiz.options?.map((option, i) => (
               <button
                 key={i}
-                onClick={() => setSelected({ ...selected, [index]: option })}
+                onClick={() =>
+                  setSelected({
+                    ...selected,
+                    [index]: option,
+                  })
+                }
                 className={`block text-left w-full px-3 py-2 mb-2 border rounded
-                  ${selected[index] === option && option === quiz.correctAnswer ? "bg-green-200 border-green-500" : ""}
-                  ${selected[index] === option && option !== quiz.correctAnswer ? "bg-red-200 border-red-500" : ""}
-                  hover:bg-gray-100`}
+                ${
+                  selected[index] === option &&
+                  option === quiz.correctAnswer
+                    ? "bg-green-200 border-green-500"
+                    : ""
+                }
+                ${
+                  selected[index] === option &&
+                  option !== quiz.correctAnswer
+                    ? "bg-red-200 border-red-500"
+                    : ""
+                }
+                hover:bg-gray-100`}
               >
                 <ReactMarkdown
                   remarkPlugins={[remarkMath]}
