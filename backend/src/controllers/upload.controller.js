@@ -2,7 +2,7 @@ import crypto from "crypto";
 import fs from "fs";
 import { extractTextFromDocument } from "../utils/documentExtractor.js";
 import { askAI, askGeminiAI } from "../services/aiService.service.js";
-import { buildPrompt } from "../utils/promptBuilder.js";
+import { buildPDFPrompt } from "../utils/uploadPrompt.js";
 import { extractJSON } from "../utils/extractJSON.js";
 import { saveStudySession } from "../services/study.service.js";
 import redisClient from "../config/redis.js";
@@ -26,7 +26,7 @@ export const uploadPdf = async (req, res) => {
       parsedResponse = JSON.parse(cacheData);
     } else {
       // console.log("PDF CACHE MISS");
-      const prompt = buildPrompt(limitedText);
+      const prompt = buildPDFPrompt(limitedText);
       // const textResponse = await askAI(prompt);
       const textResponse = await askGeminiAI(prompt);
       parsedResponse = extractJSON(textResponse);
@@ -64,7 +64,7 @@ export const uploadPdf = async (req, res) => {
         if (err) {
           console.log("file delete err", err);
         } else {
-          console.log("temp file deleted.");
+          // console.log("temp file deleted.");
         }
       });
     }
